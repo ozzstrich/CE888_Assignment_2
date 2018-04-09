@@ -8,7 +8,7 @@ frames = []
 def img_cut():
 
     for i in range(3001):
-        image_name = 'Data/Breakout/breakout' + str(i) + '.png'
+        image_name = 'Data/Chopper_Command/choppercommand' + str(i) + '.png'
         img = cv2.imread(image_name)
 
         if i == 3000:
@@ -28,13 +28,11 @@ def img_cut():
             frames.append(frame)
     return frame
 
-img_cut()
-
 
 def dense_of():
     print len(frames)
     for i in range(len(frames)):
-        prvs = cv2.cvtColor(frames[i], cv2.COLOR_BGR2GRAY)
+        prvs = cv2.cvtColor(frames[i - 1], cv2.COLOR_BGR2GRAY)
         hsv = np.zeros_like(frames[i])
         hsv[...,1] = 255
         # while(1):
@@ -44,15 +42,11 @@ def dense_of():
         hsv[...,0] = ang * 180 / np.pi / 2
         hsv[...,2] = cv2.normalize(mag,None,0,255,cv2.NORM_MINMAX)
         bgr = cv2.cvtColor(hsv,cv2.COLOR_HSV2BGR)
-        # cv2.imshow('frame2',bgr)
-        # k = cv2.waitKey(30) & 0xff
-        # if k == 27:
-        # print "k == 27"
-        # break
-        # elif k == ord('s'):
+
         if i == 12003:
             cv2.imwrite('opticalfb_' + str(i) + '.png',frames[i])
             cv2.imwrite('opticalhsv_' + str(i) + '.png',bgr)
         prvs = next
 
+img_cut()
 dense_of()
