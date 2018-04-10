@@ -9,7 +9,7 @@ frames = []
 def img_cut():
 
     for i in range(3001):
-        image_name = 'Data/Breakout/breakout' + str(i) + '.png'
+        image_name = 'Data/Zaxxon/zaxxon' + str(i) + '.png'
         img = cv2.imread(image_name)
 
         if i == 3000:
@@ -43,8 +43,8 @@ def dense_of():
         bgr = cv2.cvtColor(hsv,cv2.COLOR_HSV2BGR)
 
         if i == 12003:
-            cv2.imwrite('opticalfb_' + str(i) + '.png',frames[i])
-            cv2.imwrite('opticalhsv_' + str(i) + '.png',bgr)
+            cv2.imwrite('FB_.png',frames[i])
+            cv2.imwrite('DO_.png',bgr)
         prvs = next
 
 img_cut()
