@@ -10,9 +10,9 @@ uv = []
 folder = "James_Bond"
 gamename = "jamesbond"
 
+
 # Read in images and cut into 4 slices (mod so it does it for other games)
 def img_cut():
-
     for i in range(3001):
         image_name = 'Data/' + folder + '/' + gamename + str(i) + '.png'
         img = cv2.imread(image_name)
@@ -25,13 +25,22 @@ def img_cut():
         crop_width = 84
         crop_x = 0
 
-        for i in range(4):
+        for j in range(4):
             frame = img[crop_y:crop_height, crop_x:crop_width]
             # print crop_x, " : ", crop_width
             crop_x += crop_height
             crop_width += crop_height
             frames.append(frame)
     return frame
+
+
+def background_sub():
+    bgs = cv2.createBackgroundSubtractorMOG2()
+
+    for i in range(len(frames)):
+        frame = bgs.apply(frames[i])
+        cv2.imwrite('Data/Background_Subtraction/BGS_' + gamename + ' ' + str(i) + ' .png', frame)
+
 
 
 def dense_of():
@@ -54,8 +63,11 @@ def dense_of():
             print "Writing image"
             cv2.imwrite('DO_' + gamename + '.png',bgr)
             print "Image done"
+            print flow
+            print len()
         prvs = next
 
 
 img_cut()
-dense_of()
+background_sub()
+# dense_of()
