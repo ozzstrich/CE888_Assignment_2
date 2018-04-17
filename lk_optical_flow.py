@@ -8,7 +8,7 @@ frames = []
 def img_cut():
 
     for i in range(3001):
-        image_name = 'Data/Chopper_Command/choppercommand' + str(i) + '.png'
+        image_name = 'Data/Breakout/breakout' + str(i) + '.png'
         img = cv2.imread(image_name)
 
         if i == 3000:
@@ -42,12 +42,14 @@ def lk_opflow():
         # Take first frame and find corners in it
         old_gray = cv2.cvtColor(frames[i - 1], cv2.COLOR_BGR2GRAY)  # may need to be i-1
         p0 = cv2.goodFeaturesToTrack(old_gray, mask = None, **feature_params)
+
         mask = np.zeros_like(frames[i - 1])
 
         frame_gray = cv2.cvtColor(frames[i], cv2.COLOR_BGR2GRAY)
 
         # calculate optical flow
         p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **lk_params)
+
         # Select good points
         good_new = p1[st == 1]
         good_old = p0[st == 1]

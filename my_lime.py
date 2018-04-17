@@ -18,8 +18,8 @@ print "\n LIME Analysis starting"
 
 text_file = 'Data/Breakout/breakout.txt'
 f = open(text_file)
-model = play_one_episode.pd()
-# model = inc_net.InceptionV3()
+# model = play_one_episode.pd()
+model = inc_net.InceptionV3()
 
 
 def trans_and_predict():
@@ -32,8 +32,9 @@ def trans_and_predict():
         img = inc_net.preprocess_input(img)
         output.append(img)
 
-        actions = f.readlines().splitlines()
-        preds = model.predict(img, actions)
+        # actions = f.readlines().splitlines()
+        # preds = model.predict(img, actions)
+        preds = model.predict(img)
 
         print "\n ============= Image ", i, " Prediction ============= \n"
         for x in decode_predictions(preds)[0]:
@@ -56,3 +57,4 @@ def lime_exp():
     fig.savefig("output.png")
 
 trans_and_predict()
+lime_exp()

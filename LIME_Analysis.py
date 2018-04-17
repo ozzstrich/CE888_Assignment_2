@@ -15,6 +15,9 @@ import numpy as np
 
 print "\n Lime Analysis Starting \n"
 
+f = open('Data/Breakout/breakout.txt')
+actions = f.read().splitlines()
+
 # Push info to comet
 # experiment = Experiment(api_key="FVJK5r3DO7NBCS6Yt2S8WBu7z", project_name="ce888")
 
@@ -22,10 +25,10 @@ print "\n Lime Analysis Starting \n"
 inet_model = inc_net.InceptionV3()
 
 
-def transform_img_fn(path_list): #  Transforms image into array of numbers
+def transform_img_fn(path_list):  # Transforms image into array of numbers
     out = []
     for img_path in path_list:
-        img = image.load_img(img_path)  #, target_size=(299, 299))
+        img = image.load_img(img_path)  # target_size=(299, 299))
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
         x = inc_net.preprocess_input(x)
@@ -34,7 +37,7 @@ def transform_img_fn(path_list): #  Transforms image into array of numbers
 
 # Image prediction
 # in range(number of images)
-for i in range(25):
+for i in range(5):
     images = transform_img_fn([os.path.join('Data/Breakout/breakout' + str(i) + '.png')])
     # I'm dividing by 2 and adding 0.5 because of how this Inception represents images
     plt.imshow(images[0] / 2 + 0.5)
