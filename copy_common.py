@@ -15,27 +15,43 @@ from tensorpack.utils.stats import StatCounter
 from tensorpack.utils.utils import get_tqdm_kwargs
 
 
-def play_one_episode(env, func, render=False):
-    def pd(s):
+def play_one_episode(s, func, render=False):
+
+    # def pd(s):
+    #     """
+    #     Map from observation to action, with 0.01 greedy.
+    #     """
+    #     act = func(s[None, :, :, :])[0][0].argmax()
+    #     if random.random() < 0.01:
+    #         spc = env.action_space
+    #         act = spc.sample()
+    #     return act
+
+    def wrapper_pd(*s2):
         """
         Map from observation to action, with 0.01 greedy.
         """
-        act = func(s[None, :, :, :])[0][0].argmax()
-        if random.random() < 0.01:
-            spc = env.action_space
-            act = spc.sample()
+        # act = func(*s[None, :, :, :])[0][0].argmax()
+        act = func(s2)[0][0].argmax()
+        # if random.random() < 0.01:
+        #     spc = env.action_space
+        #     act = spc.sample()
         return act
 
-    ob = env.reset()
-    sum_r = 0
-    while True:
-        act = pd(ob)
-        ob, r, isOver, info = env.step(act)
-        if render:
-            env.render()
-        sum_r += r
-        if isOver:
-            return sum_r
+    wrapper_act = wrapper_pd(s)
+
+    # ob = env.reset()
+    # sum_r = 0
+    # while True:
+    #     act = pd(ob)
+    #     ob, r, isOver, info = env.step(act)
+    #     if render:
+    #         env.render()
+    #     sum_r += r
+    #     if isOver:
+    #         return sum_r
+
+    return wrapper_act
 
 
 def play_n_episodes(player, predfunc, nr, render=False):

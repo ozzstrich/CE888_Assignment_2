@@ -12,6 +12,9 @@ from skimage.io import imread
 import matplotlib.pyplot as plt
 import numpy as np
 
+from copy_common import play_one_episode
+
+
 
 print "\n Lime Analysis Starting \n"
 
@@ -33,6 +36,8 @@ def transform_img_fn(path_list):  # Transforms image into array of numbers
         x = np.expand_dims(x, axis=0)
         x = inc_net.preprocess_input(x)
         out.append(x)
+        print "x LEN: ", len(x)
+        print x
     return np.vstack(out)
 
 # Image prediction
@@ -42,6 +47,7 @@ for i in range(5):
     # I'm dividing by 2 and adding 0.5 because of how this Inception represents images
     plt.imshow(images[0] / 2 + 0.5)
     preds = inet_model.predict(images)
+    # preds = get_pd(images, actions)
     print "\n"
     for x in decode_predictions(preds)[0]:
         print(x)
@@ -51,6 +57,7 @@ explainer = lime_image.LimeImageExplainer()
 # Hide color is the color for a superpixel turned OFF. Alternatively, if
 # it is NONE, the superpixel will be replaced by the average of its pixels
 explanation = explainer.explain_instance(images[0], inet_model.predict, top_labels=5, hide_color=0, num_samples=1000)
+
 
 
 from skimage.segmentation import mark_boundaries
