@@ -18,8 +18,6 @@ data_path = 'Data/Breakout/breakout'
 text_file = 'Data/Breakout/breakout.txt'
 f = open(text_file)
 
-game_to_load = "./train_atari.py --task play --env Breakout-v0 --load Breakout-v0.npz"
-
 model = play_one_episode
 
 environment = "//Users/osama/Documents/University/Masters/CE888_Assignment/Assignment_2/Initial_Code/Breakout-v0.npz"
@@ -42,6 +40,8 @@ nontrans_imgset = []
 imgset = []
 actset = []
 
+# Change i to length of dataset as needed
+
 
 def image_transform():
     for i in range(15):
@@ -58,9 +58,9 @@ def image_transform():
         actset.append(actions)
 
         # Uncomment for predictions
-        # (WARNING: Laptop fans will go wild - Could OVERHEAT)
-        preds = get_pd(new_img, predictor)
-        print "Image", i, "prediction: ", preds, '\n'
+        # (WARNING:  - Could OVERHEAT on large image set)
+        # preds = get_pd(new_img, predictor)
+        # print "Image", i, "prediction: ", preds, '\n'
     print "============= IMAGES TRANSFORMED ============= \n"
 
 
@@ -69,9 +69,6 @@ def lime_exp():
 
     explainer = lime_image.LimeImageExplainer()
     # print "imgset length: ", len(imgset), '\n'
-
-    # Hide color is the color for a superpixel turned OFF. Alternatively, if
-    # it is NONE, the superpixel will be replaced by the average of its pixels
 
     # explain_instance(image, classifier_fn, labels=(1, ), hide_color=None, top_labels=5, num_features=100000, num_samples=1000, batch_size=10, qs_kernel_size=4, distance_metric='cosine', model_regressor=None)
     # for i in range(50):

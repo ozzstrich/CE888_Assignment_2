@@ -4,14 +4,12 @@ import numpy as np
 frames = []
 uv = []
 
-# TODO(Next Step) - Optical flow for all games, and derive conclusion. Maybe pass these images to LIME?
-
 # Name of folder with game images and name of image (gamename)
 folder = "Breakout"
 gamename = "breakout"
 
 
-# Read in images and cut into 4 slices (mod so it does it for other games)
+# Read in images and cut into 4 slices
 def img_cut():
     for i in range(3001):
         image_name = 'Data/' + folder + '/' + gamename + str(i) + '.png'
@@ -36,33 +34,31 @@ def img_cut():
 
 
 def dense_of():
-    dense_of_length = len(frames)  # change to len(frames when working)
-    print "frames length: ", len(frames)
-    # dense_of_length = 5000
+    dense_of_length = len(frames)
     for i in range(dense_of_length):
-        # print i, "/", dense_of_length
-        prvs = cv2.cvtColor(frames[i - 1], cv2.COLOR_BGR2GRAY)
+        previous = cv2.cvtColor(frames[i - 1], cv2.COLOR_BGR2GRAY)
         hsv = np.zeros_like(frames[i])
         hsv[...,1] = 255
+
         next = cv2.cvtColor(frames[i],cv2.COLOR_BGR2GRAY)
         # FlowFarneback(prev, next, pyr_scale, levels, winsize, iterations, poly_n, poly_sigma, flags[, flow])
-        # See notebook for original parameters. Need to set params to enable transparencys
-        flow = cv2.calcOpticalFlowFarneback(prvs,next, None, 0.5, 1, 30, 3, 7, 1.5, 0)
+        # See notebook for original parameters. Need to set params to enable transparency
+        flow = cv2.calcOpticalFlowFarneback(previous,next, None, 0.5, 1, 30, 3, 7, 1.5, 0)
 
-        mag, ang = cv2.cartToPolar(flow[...,0], flow[...,1])
-        hsv[...,0] = ang * 180 / np.pi / 2
-        hsv[...,2] = cv2.normalize(mag,None,0,255,cv2.NORM_MINMAX)
-    bgr = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+        mangitude, angle = cv2.cartToPolar(flow[...,0], flow[...,1])
+
+        hsv[...,0] = angle * 180 / np.pi / 2
+        hsv[...,2] = cv2.normalize(mangitude, None,0,255,cv2.NORM_MINMAX)
+        bgr = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
         uv.append(flow[0])
 
         if i == dense_of_length - 1:
             print "Writing image"
-            # cv2.imwrite('DO_' + gamename + '.png',bgr)
+            cv2.imwrite('DO_' + gamename + '.png',bgr)
             print "Image done"
-            print flow
-        prvs = next
+            # print flow
+        previous = next
 
 
 img_cut()
-# background_sub()
 dense_of()

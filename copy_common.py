@@ -17,16 +17,7 @@ from tensorpack.utils.utils import get_tqdm_kwargs
 
 def play_one_episode(s, func, render=False):
 
-    # def pd(s):
-    #     """
-    #     Map from observation to action, with 0.01 greedy.
-    #     """
-    #     act = func(s[None, :, :, :])[0][0].argmax()
-    #     if random.random() < 0.01:
-    #         spc = env.action_space
-    #         act = spc.sample()
-    #     return act
-
+    # Wrapper prediction function
     def wrapper_pd(*s2):
         """
         Map from observation to action, with 0.01 greedy.
